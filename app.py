@@ -71,8 +71,9 @@ def predict_texts(texts):
 # -------------------------------
 # Routes
 # -------------------------------
-@app.route("/")
+@app.route("/", methods=['GET','HEAD'])
 def index():
+    if request.method =='HEAD': return ' ', 200
     return render_template("index.html", app_name=APP_NAME)
 
 @app.route("/api/predict", methods=["POST"])
@@ -92,6 +93,7 @@ def api_predict():
         results = predict_texts(texts)
         return jsonify({"results": results})
     except Exception as e:
+        print(f"[ERROR] {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
